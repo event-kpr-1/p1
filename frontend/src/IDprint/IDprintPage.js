@@ -24,6 +24,7 @@ const IDprintPage = () => {
                     "Content-Type" : "application/json"
                 },
             })
+            
             const participant = await res.json();
             if(!res.ok){
                 console.log("data not found")

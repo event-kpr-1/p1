@@ -41,20 +41,20 @@ const ParticipantSchema = mongoose.Schema({
         
     }],
     food : {
-        type : Boolean,
-        default : false
+        type : Number,
+        default : 0
     },
     idcard : {
-        type : Boolean,
-        default : false
+        type : Number,
+        default : 0
     },
     certificate : [{
         type : String,
         default : []
     }],
     kit : {
-        type : Boolean,
-        default : false
+        type : Number,
+        default : 0
 
     }
 

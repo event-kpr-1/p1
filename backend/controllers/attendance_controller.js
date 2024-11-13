@@ -7,26 +7,31 @@ export const attended = async(req , res) => {
         if(!participant){
             return res.status(404).json({error : "participant not found"})
         }
+        
         if(event === 'kit' || event === 'certificate' || event === 'food'){
-
-            const newValue = !participant[event];
+            
+            const newValue = participant[event]+1;
             await participant.updateOne({ [event]: newValue });
             await participant.save();
             res.status(200).json({ [event]: newValue });
         }
         else{
+            if(participant.participated.length >=2){
+                return res.status(200).json({msg : "participated 2"})
+            }
             if(participant.participated.includes([event])){
                 res.status(200).json({msg : "already participated"})
             }
             else{
                 await participant.updateOne({ $push :{participated : [event]} })
                 await participant.save();
+                
                 res.status(200).json({added : [event]})
             }
         }
 
 
-        // Respond with the updated value
+        
         
     } catch (err) {
         // console.log(err)
