@@ -1,11 +1,13 @@
 import express from 'express'
 
 // controllers
-import {printid} from '../controllers/provider_controller.js'
+import {printid , printcertificate} from '../controllers/provider_controller.js'
+
 
 const router = express.Router();
 
-router.get("/printid" , printid)
+router.get("/printid/:regno" , printid)
+router.get("/printcertificate/:regno",printcertificate)
 
 
 export default router;

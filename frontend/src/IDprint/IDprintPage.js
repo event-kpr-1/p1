@@ -17,7 +17,7 @@ const IDprintPage = () => {
     const handleSearch = async () => {
         try {
             console.log("search click")
-            const res = await fetch(`${baseURL}/api/participant/show/${id}`,{
+            const res = await fetch(`${baseURL}/api/provider/printid/${id}`,{
                 method : "GET",
                 credentials : 'include',
                 headers : {
