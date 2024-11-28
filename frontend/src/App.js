@@ -4,6 +4,7 @@ import { Route , Routes} from 'react-router-dom'
 // middle ware
 // import { useQuery } from '@tanstack/react-query'
 // id printing
+import HomePage from './HomePage'
 import IDprintPage from './IDprint/IDprintPage'
 import QRscan from './IDprint/QRscan'
 import AttendanceEvent from './Register/AttendanceEvent'
@@ -14,7 +15,7 @@ const App = () => {
   return (
     <div>
       <Routes>
-        <Route path = '/' element='home page'/>
+        <Route path = '/' element={<HomePage/>}/>
         <Route path = '/printid' element = {<IDprintPage />} />
         <Route path = '/qrscan' element = {<QRscan/>} />
         <Route path = '/register' element = {<RegisterForm/>} />
@@ -23,7 +24,7 @@ const App = () => {
     </Routes>
       
       
-  
+      
     </div>
   )
 }

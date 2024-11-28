@@ -44,46 +44,85 @@ const IDprintPage = () => {
     
     
     const handlePrint = async () => {
-        
-        if(isThere === 'participant' || isThere === 'not found'){
-            alert("nothing to print")
+        // Check if there's nothing to print
+        if (isThere === 'participant' || isThere === 'not found') {
+          alert("Nothing to print");
+          return;
         }
-        else{
-            const img =  (`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${id}`)
-            setQRimg(img)
-            setDispPage(false);
-            setTimeout(async() => {
-                window.print();
-                setTimeout(()=>{
-                    setDispPage(true); 
-                    setTimeout(() => {
-                        inputRef.current.focus();
-                        setId('')
-                        setDetail({})
-                    })
-                },500)           
-            }, 50);
-        }     
-    }
+      
+        try {
+          // Step 1: Generate QR code URL and update state
+          console.log("Generating QR image...");
+          const img = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${id}`;
+          setQRimg(img);
+      
+          // Wait a short time to ensure QR image is updated in the UI
+          await new Promise((resolve) => setTimeout(resolve, 100));
+      
+          // Step 2: Hide the page content
+          console.log("Hiding page...");
+          setDispPage(false);
+      
+          // Wait for UI to update before proceeding
+          await new Promise((resolve) => setTimeout(resolve, 500));
+      
+          // Step 3: Print the page
+          console.log("Printing page...");
+          window.print();
+      
+          // Step 4: Restore the page after printing
+          await new Promise((resolve) => setTimeout(resolve, 500)); // Short delay after print
+          console.log("Restoring page...");
+          setDispPage(true);
+          
+          // Step 5: Reset form and focus input
+          setId('');
+          setDetail({});
+          await new Promise((resolve) => setTimeout(resolve, 500)); // Short delay after print
+          inputRef.current.focus();
+      
+          console.log("Process completed.");
+        } catch (error) {
+          console.error("Error during the print process:", error);
+        }
+      };
+      
+      
+      
     
     if(dispPage){
         return (
-            <div>
-            <label htmlFor="Printid">ID here:</label>
-            <input 
-                type="text" 
-                id="Printid" 
-                value={id} 
-                onChange={(e) => setId(e.target.value)} 
-                ref={inputRef}
-                
-                />
-
-            <button onClick={handleSearch}>Search</button>
-            <button onClick={() =>handlePrint()}>Print</button>
-            <p>{isThere}</p>
-            
+            <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+            <label htmlFor="Printid" className="block text-sm font-medium text-gray-700">
+              ID here:
+            </label>
+            <input
+              type="text"
+              id="Printid"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              ref={inputRef}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            />
+          
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={handleSearch}
+                className="w-1/2 mr-2 py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
+                Search
+              </button>
+              <button
+                onClick={() => handlePrint()}
+                className="w-1/2 ml-2 py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              >
+                Print
+              </button>
             </div>
+          
+            <p className="text-center text-gray-700 font-medium mt-4">{isThere}</p>
+          </div>
+          
         )}
     else{
         return(
