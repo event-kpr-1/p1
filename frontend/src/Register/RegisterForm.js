@@ -1,16 +1,51 @@
-import React from 'react'
+import React ,{useState} from 'react'
+import {baseURL} from '../constant/url.js'
 
 const RegisterForm = () => {
+    const [data, setData] = useState({
+        email : "",
+        name : "",
+        college : "",
+        regno : "",
+        gender : "",
+        phone : ""
+    })
 
-    const handleSubmit = (e) =>{
+    const handleChange = (e) => {
+        setData({...data,[e.target.name]: e.target.value});
+    }
+    const handleSubmit = async(e) =>{
         e.preventDefault();
-        console.log("submitted")
+        try {
+            const res = await fetch(`${baseURL}/api/participant/register`,{
+                method : "POST",
+                
+                headers : {
+                    "content-Type" : "application/json",
+                    
+                },
+                body : JSON.stringify({email : data.email,gender : data.gender,phone : data.phone,college : data.phone,regno : data.regno,name : data.name})
+
+            })
+            const datas = await res.json();
+
+            if(!res.ok){
+                throw new Error(data.error || "something went wrong");
+            }
+            console.log(datas)
+
+        } catch (err) {
+            console.log(err)
+            throw err;
+        }
+        console.log(data)
+        alert("regesteration successful")
     }
   return (
     <div className="max-w-lg mx-auto  p-6 h-screen bg-green-500 shadow-lg rounded-lg">
         <h2 className="text-2xl font-bold text-center mb-6">Registration Form</h2>
 
-        <form action="" onSubmit={(e) => handleSubmit(e)} className="space-y-5  border-2 p-4 rounded-2xl">
+        <form action=""  className="space-y-5  border-2 p-4 rounded-2xl">
             
             {/* Name Input */}
             <div>
@@ -19,10 +54,11 @@ const RegisterForm = () => {
             </label>
             <input
                 type="text"
-                name="Name"
+                name="name"
                 id="Name"
                 placeholder="Your name"
                 autoComplete="on"
+                onChange={handleChange}
                 required
                 className="mt-1 block w-full rounded-md border-white border-2 shadow-sm focus:border-indigo-500 p-2 bg-inherit"
             />
@@ -38,6 +74,7 @@ const RegisterForm = () => {
                 name="email"
                 id="email"
                 placeholder="abc@gmail.com"
+                onChange={handleChange}
                 autoComplete="on"
                 className="mt-1 block w-full rounded-md border-white border-2 shadow-sm focus:border-indigo-500 p-2 bg-inherit"
             />
@@ -50,9 +87,10 @@ const RegisterForm = () => {
             </label>
             <input
                 type="tel"
-                name="phonenumber"
+                name="phone"
                 id="phonenumber"
                 placeholder="1236547890"
+                onChange={handleChange}
                 pattern="[0-9]{10}"
                 required
                 autoComplete="on"
@@ -67,9 +105,10 @@ const RegisterForm = () => {
             </label>
             <input
                 type="text"
-                name="college_name"
+                name="college"
                 id="college_name"
                 placeholder="Your college name"
+                onChange={handleChange}
                 autoComplete="on"
                 required
                 className="mt-1 block w-full rounded-md border-white border-2 shadow-sm focus:border-indigo-500 p-2 bg-inherit "
@@ -79,16 +118,17 @@ const RegisterForm = () => {
             {/* Subject Select */}
             <div>
             <label htmlFor="select" className="block text-sm font-medium text-black">
-                Subject:
+                Gender:
             </label>
             <select
-                name="select"
+                name="gender"
                 id="select"
+                onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-white border-2 shadow-sm focus:border-indigo-500 p-2 bg-inherit"
             >
-                <option value="male">MALE</option>
-                <option value="female">FEMALE</option>
-                <option value="others">OTHERS</option>
+                <option value="M">MALE</option>
+                <option value="F">FEMALE</option>
+                <option value="O">OTHERS</option>
             </select>
             </div>
 
@@ -99,9 +139,10 @@ const RegisterForm = () => {
             </label>
             <input
                 type="text"
-                name="Register_no"
+                name="Regno"
                 id="Register_no"
                 placeholder="Your register number"
+                onChange={handleChange}
                 autoComplete="on"
                 required
                 className="mt-1 block w-full rounded-md border-white border-2 shadow-sm focus:border-indigo-500 p-2 bg-inherit"
@@ -113,7 +154,9 @@ const RegisterForm = () => {
             <button
                 type="submit"
                 className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-md focus:outline-none focus:ring-2 p-2  border focus:ring-offset-2"
+                onClick={(e)=>handleSubmit(e)}
             >
+
                 Submit
             </button>
             </div>
