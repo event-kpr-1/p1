@@ -32,6 +32,8 @@ const IDprintPage = () => {
             }
             setDetail(participant)
             setIsThere(participant.name)
+            const img = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${id}`;
+            setQRimg(img);
             
             
             // console.log("Search :" , detail);
@@ -51,34 +53,31 @@ const IDprintPage = () => {
         }
       
         try {
-          // Step 1: Generate QR code URL and update state
-          console.log("Generating QR image...");
-          const img = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${id}`;
-          setQRimg(img);
+          
+          
       
-          // Wait a short time to ensure QR image is updated in the UI
+          
           await new Promise((resolve) => setTimeout(resolve, 100));
       
-          // Step 2: Hide the page content
-          console.log("Hiding page...");
+          
           setDispPage(false);
       
-          // Wait for UI to update before proceeding
+          
           await new Promise((resolve) => setTimeout(resolve, 500));
       
-          // Step 3: Print the page
-          console.log("Printing page...");
+          
           window.print();
       
-          // Step 4: Restore the page after printing
-          await new Promise((resolve) => setTimeout(resolve, 500)); // Short delay after print
-          console.log("Restoring page...");
+          
+          await new Promise((resolve) => setTimeout(resolve, 500)); 
+          
           setDispPage(true);
           
-          // Step 5: Reset form and focus input
+          
           setId('');
           setDetail({});
-          await new Promise((resolve) => setTimeout(resolve, 500)); // Short delay after print
+          setIsThere('')
+          await new Promise((resolve) => setTimeout(resolve, 500)); 
           inputRef.current.focus();
       
           console.log("Process completed.");
@@ -102,7 +101,7 @@ const IDprintPage = () => {
               value={id}
               onChange={(e) => setId(e.target.value)}
               ref={inputRef}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="mt-1 p-1 px-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
           
             <div className="flex justify-between mt-4">
