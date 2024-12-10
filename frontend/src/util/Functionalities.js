@@ -16,10 +16,7 @@ export const scanner = async (scannerRef,qrCodeRegionId ,result) => {
                        
                         console.log("Scanned:", decodedText);
                         result(decodedText)
-                        setTimeout(() => {
-                            html5QrCode.stop();
-                            
-                        }, 5000);
+                        
 
                         html5QrCode.stop();
                         
