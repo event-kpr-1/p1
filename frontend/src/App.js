@@ -10,6 +10,7 @@ import QRscan from './IDprint/QRscan'
 import AttendanceEvent from './Register/AttendanceEvent'
 import RegisterForm from './Register/RegisterForm'
 import CertificatePrint from './IDprint/CertificatePrint'
+import QrReader from './util/QrReader'
 
 const App = () => {
   return (
@@ -17,7 +18,8 @@ const App = () => {
       <Routes>
         <Route path = '/' element={<HomePage/>}/>
         <Route path = '/printid' element = {<IDprintPage />} />
-        <Route path = '/qrscan' element = {<QRscan/>} />
+        {/* <Route path = '/qrscan' element = {<QRscan/>} /> */}
+        <Route path = '/qrscan' element = {<QrReader/>} />
         <Route path = '/register' element = {<RegisterForm/>} />
         <Route path = '/attendance' element = {<AttendanceEvent/>} />
         <Route path = '/certificate' element = {<CertificatePrint/>} />

@@ -1,6 +1,8 @@
 import React, { useState , useRef } from 'react'
 import { baseURL } from '../constant/url';
 
+import { BiQrScan } from 'react-icons/bi';
+
 const AttendanceEvent = () => {
     const [out,setOut] = useState('')
     const [id,setId] = useState('');
@@ -37,6 +39,9 @@ const AttendanceEvent = () => {
         }
     }
 
+    const handleScan = () =>{
+        
+    }
     
   return (
     <div className="flex w-screen h-screen bg-red-600 justify-center items-center">
@@ -58,7 +63,7 @@ const AttendanceEvent = () => {
                     required 
                     className="mt-1 p-2 border rounded-lg focus:outline-none focus:ring-2 flex-1"
                     />
-                <span className="mt-1 p-2 border rounded-lg focus:outline-none focus:ring-2 h-auto w-10 text-center" >x</span>
+                <button className="mt-1 flex justify-center items-center border rounded-lg focus:outline-none focus:ring-2 h-auto w-10 text-center" onClick={handleScan}><BiQrScan  /></button>
             </div>
             </div>
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import QrReader from '../constant/QrReader'
+import QrReader from '../util/QrReader'
 
 const QRscan = () => {
   const [name,setName] = useState('')
@@ -42,7 +42,7 @@ const QRscan = () => {
           alt="number"
           className="border border-gray-300 rounded"
         />
-        <h2 className="text-xl font-bold text-gray-800">{name.toUpperCase()}</h2>
+        <h2 className="text-xl font-bold text-gray-800">{name}</h2>
       </div>
     </div>
 
