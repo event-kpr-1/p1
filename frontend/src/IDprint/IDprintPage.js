@@ -1,5 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { baseURL } from '../constant/url';
+import {BiQrScan} from 'react-icons/bi'
+import { scanner } from '../util/Functionalities';
+
 
 
 
@@ -12,11 +15,14 @@ const IDprintPage = () => {
     
     const [dispPage, setDispPage ] =useState(true)
     const inputRef = useRef();
+
+    const scannerRef = useRef('null')
+    const qrCodeRegionId = "qr-reader";
     
     
     const handleSearch = async () => {
         try {
-            console.log("search click")
+            // console.log("search click")
             const res = await fetch(`${baseURL}/api/provider/printid/${id}`,{
                 method : "GET",
                 credentials : 'include',
@@ -44,7 +50,10 @@ const IDprintPage = () => {
         
     };
     
-    
+    const handleScan = ()=> {  
+      scanner(scannerRef,qrCodeRegionId , setId);
+    };
+
     const handlePrint = async () => {
         // Check if there's nothing to print
         if (isThere === 'participant' || isThere === 'not found') {
@@ -91,18 +100,24 @@ const IDprintPage = () => {
     
     if(dispPage){
         return (
-            <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+            <div className="max-w-md mx-auto  h-screen p-6 bg-white shadow-lg rounded-lg flex flex-col justify-center ">
             <label htmlFor="Printid" className="block text-sm font-medium text-gray-700">
               ID here:
-            </label>
+            </label >
+            <div className='flex justify-between gap-3'>
             <input
               type="text"
+              
               id="Printid"
               value={id}
               onChange={(e) => setId(e.target.value)}
               ref={inputRef}
-              className="mt-1 p-1 px-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
+              className="mt-1 p-1 px-2 block bg-slate-300 w-full border-2 rounded-md border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            <button className="mt-1 flex justify-center items-center border rounded-lg focus:outline-none focus:ring-2 h-auto w-10 aspect-square text-center" onClick={handleScan}>
+                <BiQrScan/>
+                </button>
+              </div>
           
             <div className="flex justify-between mt-4">
               <button
@@ -120,7 +135,10 @@ const IDprintPage = () => {
             </div>
           
             <p className="text-center text-gray-700 font-medium mt-4">{isThere}</p>
+            <div ref={scannerRef} id={qrCodeRegionId}      className=' w-auto h-48  aspect-square    ' />
+    
           </div>
+          
           
         )}
     else{

@@ -1,11 +1,10 @@
 import React, { useState , useRef } from 'react'
 import { baseURL } from '../constant/url';
 
-// import { BiQrScan } from 'react-icons/bi';
-// import {BiQrScan} from 'react-icons/bi'
+
+import {BiQrScan} from 'react-icons/bi'
 import { scanner } from '../util/Functionalities'
-import QrReader from '../util/QrReader';
-import { QrcodeResultFormat } from 'html5-qrcode/esm/core';
+
 
 
 const AttendanceEvent = () => {
@@ -13,6 +12,8 @@ const AttendanceEvent = () => {
     const [id,setId] = useState('');
     const [event,setEvent] = useState('');
     const inputRef = useRef();
+    const scannerRef = useRef('null')
+    const qrCodeRegionId = "qr-reader";
 
     const handleAdd = async() => {
         
@@ -43,9 +44,8 @@ const AttendanceEvent = () => {
             inputRef.current.focus();
         }
     }
-    const scannerRef = useRef('null')
-    const qrCodeRegionId = "qr-reader";
-    // const [qrsection,setqrscetion] = useState(false)
+    
+    
     const handleScan = ()=> {  
             scanner(scannerRef,qrCodeRegionId , setId);
         
@@ -53,15 +53,15 @@ const AttendanceEvent = () => {
     };
     
   return (
-    <div className="relative flex w-screen h-screen bg-red-600 justify-center items-center">
-   {/*  */}
-    <div ref={scannerRef} id={qrCodeRegionId} className="p-6 bg-white shadow-lg rounded-lg max-w-md mx-auto w-1/2 aspect-square ">
+    <div className="relative flex flex-col w-screen h-screen bg-red-600 justify-center items-center">
+
+    <div  className="p-6 bg-white shadow-lg rounded-lg max-w-md mx-auto w-auto aspect-square ">
         <div className="mb-4">
             <div className="text-lg font-semibold text-gray-700">{out}</div>
             <h1 className="text-2xl font-bold text-center text-gray-800 mb-4">{event}</h1>
         </div>
 
-        <form action="" className="space-y-4">
+        <div className="space-y-4">
             <div className="flex flex-col">
             <label htmlFor="id" className="text-sm font-medium text-gray-600">Scan ID:</label>
             <div className='flex flex-row justify-evenly gap-2'>            
@@ -74,7 +74,7 @@ const AttendanceEvent = () => {
                     className="mt-1 p-2 border rounded-lg focus:outline-none focus:ring-2 flex-1"
                     />
                 <button className="mt-1 flex justify-center items-center border rounded-lg focus:outline-none focus:ring-2 h-auto w-10 text-center" onClick={handleScan}>
-                X
+                <BiQrScan/>
                 </button>
             </div>
             </div>
@@ -103,14 +103,7 @@ const AttendanceEvent = () => {
             </select>
 
             </div>
-        </form>
-
- 
-  
-    
-  
-
-
+        </div>
         <div className="mt-6">
             <button 
             onClick={handleAdd} 
@@ -120,6 +113,9 @@ const AttendanceEvent = () => {
             </button>
         </div>
     </div>
+    {/* scan area */}
+    <div ref={scannerRef} id={qrCodeRegionId} 
+      className=' w-auto h-48  aspect-square    ' />
     </div>
 
   )

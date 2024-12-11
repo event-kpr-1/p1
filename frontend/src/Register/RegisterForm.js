@@ -43,6 +43,9 @@ const RegisterForm = () => {
                 throw new Error(responseData.error || 'Something went wrong');
             }
             console.log('Registration successful:', responseData);
+            return (
+                <div className='w-screen h-screen flex justify-center items-center text-lg'>your registration is completed</div>
+            )
         } catch (err) {
             console.error('Error during registration:', err.message);
         }

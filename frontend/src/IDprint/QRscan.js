@@ -1,12 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState , useRef } from 'react'
+import { scanner } from '../util/Functionalities'
 
-import QrReader from '../util/QrReader'
+
 
 const QRscan = () => {
   const [name,setName] = useState('')
   const [number,setNumber] = useState('')
+  const scannerRef = useRef('null')
+    const qrCodeRegionId = "qr-reader";
 
   // scanning
+  const handleScan = ()=> {  
+    scanner(scannerRef,qrCodeRegionId , setName);
+  };
+
+
 
   
 
@@ -32,8 +40,10 @@ const QRscan = () => {
           className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-
-      <QrReader setName = {setName}/>
+      <button onClick={handleScan}>scan</button>
+      <div ref={scannerRef} id={qrCodeRegionId} 
+      className=' w-auto h-48  aspect-square    ' />
+    
 
       {/* Output Section */}
       <div className="flex flex-col items-center space-y-4 mt-6">

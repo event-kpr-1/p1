@@ -5,7 +5,9 @@ export const scanner = async (scannerRef,qrCodeRegionId ,result) => {
         console.log(html5QrCode);
 
         const startQrScanner = async () => {
+            
             try {
+                    
                 await html5QrCode.start(
                     { facingMode: "environment" },
                     {
@@ -13,25 +15,30 @@ export const scanner = async (scannerRef,qrCodeRegionId ,result) => {
                         qrbox: { width: 250, height: 250 },
                     },
                     async (decodedText) => {
-                       
-                        console.log("Scanned:", decodedText);
+                        
+                        // console.log("Scanned:", decodedText);
                         result(decodedText)
                         
-
+                        
                         html5QrCode.stop();
                         
-                       
+                        
                     }
                 );
-            } catch (err) {
-                console.log(err);
-                result('error')
-            } finally {
-                return 
-            }
+                } catch (err) {
+                    console.log(err);
+                    result('error')
+                } finally {
+                    return 
+                }
+            
         };
 
         (() => startQrScanner())();
+        setTimeout(async() => {
+            if(html5QrCode.isScanning)
+                html5QrCode.stop();
+        }, 6000);
     }
 }
 
