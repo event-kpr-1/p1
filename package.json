@@ -29,5 +29,8 @@
     "react-router-dom": "^6.28.0",
     "react-to-print": "^3.0.2"
   },
+  "engines": {
+    "node": "20.x"
+  },
   "type": "module"
 }
