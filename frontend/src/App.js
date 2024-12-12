@@ -14,6 +14,7 @@ import Test from './Test'
 
 const App = () => {
   return (
+    
     <div>
       <Routes>
         <Route path = '/' element={<HomePage/>}/>
@@ -23,7 +24,7 @@ const App = () => {
        
         
         <Route path = '/qrscan' element = {<QRscan/>} />
-        <Route path = '/test' element = {<Test/>} />
+        {/* <Route path = '/test' element = {<Test/>} /> */}
     </Routes>
       
     <Toaster/>

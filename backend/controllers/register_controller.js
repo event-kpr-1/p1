@@ -75,7 +75,7 @@ export const regShow = async (req , res) => {
         if(!participant){
             return res.status(404).json({error : "participant not found"})
         }
-        console.log(participant)
+        // console.log(participant)
 
         res.status(200).json({
             _id : participant.id,

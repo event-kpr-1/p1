@@ -8,13 +8,14 @@ export const attended = async(req , res) => {
             return res.status(404).json({error : "participant not found"})
         }
         
-        if(event === 'kit' || event === 'certificate' || event === 'food'){
+        if(event === 'kit' || event === 'food'){
             
             const newValue = participant[event]+1;
             await participant.updateOne({ [event]: newValue });
             await participant.save();
             res.status(200).json({ [event]: newValue });
         }
+        
         else{
             if(participant.participated.length >=2){
                 return res.status(200).json({msg : "participated 2"})

@@ -12,7 +12,7 @@ const IDprintPage = () => {
     const [id, setId] = useState('');
     const [QRimg,setQRimg] = useState('')
     const [detail,setDetail] = useState({})
-    const [isThere,setIsThere] = useState('participant')
+    const [isThere,setIsThere] = useState('')
     
     const [dispPage, setDispPage ] =useState(true)
     const inputRef = useRef();
@@ -22,7 +22,11 @@ const IDprintPage = () => {
     
     
     const handleSearch = async () => {
-
+      if(!id){
+        toast.error('no id entered')
+        setIsThere('')
+        return;
+      }
         try {
             // console.log("search click")
             const res = await fetch(`${baseURL}/api/provider/printid/${id}`,{
@@ -35,8 +39,7 @@ const IDprintPage = () => {
             
             const participant = await res.json();
             if(!res.ok){
-                console.log("data not found")
-                throw new Error(participant.error || "data not found")
+              throw new Error(participant.error || "data not found")
             }
             setDetail(participant)
             setIsThere(participant.name)
@@ -45,9 +48,10 @@ const IDprintPage = () => {
             
             
             // console.log("Search :" , detail);
-        } catch (err) {
-            setIsThere('not found')
-            // alert("participant not found")
+          } catch (err) {
+            toast.error('data not found')
+            setIsThere('')
+            
         }
         
     };
@@ -58,8 +62,8 @@ const IDprintPage = () => {
 
     const handlePrint = async () => {
         // Check if there's nothing to print
-        if (isThere === 'participant' || isThere === 'not found') {
-          alert("Nothing to print");
+        if (isThere === '') {
+          toast("Nothing to print");
           return;
         }
       
@@ -68,7 +72,7 @@ const IDprintPage = () => {
           
       
           
-          await new Promise((resolve) => setTimeout(resolve, 100));
+          // await new Promise((resolve) => setTimeout(resolve, 100));
       
           
           setDispPage(false);
@@ -85,6 +89,7 @@ const IDprintPage = () => {
           setDispPage(true);
           
           
+          toast.success('done ✔')
           setId('');
           setQRimg('');
           setDetail({});
@@ -92,9 +97,8 @@ const IDprintPage = () => {
           await new Promise((resolve) => setTimeout(resolve, 500)); 
           inputRef.current.focus();
       
-          console.log("Process completed.");
-        } catch (error) {
-          console.error("Error during the print process:", error);
+        } catch (err) {
+          toast.error(err.message)
         }
       };
       

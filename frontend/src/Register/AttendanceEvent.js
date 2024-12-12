@@ -1,6 +1,6 @@
-import React, { useState , useRef } from 'react'
+import React, { useState , useRef, useEffect } from 'react'
 import { baseURL } from '../constant/url';
-
+import toast from 'react-hot-toast';
 
 import {BiQrScan} from 'react-icons/bi'
 import { scanner } from '../util/Functionalities'
@@ -8,22 +8,45 @@ import { scanner } from '../util/Functionalities'
 
 
 const AttendanceEvent = () => {
-    const [out,setOut] = useState('')
+   
     const [id,setId] = useState('');
     const [event,setEvent] = useState('');
     const inputRef = useRef();
+    const eventRef = useRef();
     const scannerRef = useRef('null')
     const qrCodeRegionId = "qr-reader";
+    
+    const outNotify = (status) => {
+        if(status.kit){
+           toast('its '+status.kit+'\'s kit')
+           return
+        }
+        if(status.food){
+           toast('its '+status.food+'\'s food')
+           return
+        }
+        if(status.msg){
+           toast(status.msg)
+           return
+        }
+        toast.success('registered : '+status.added)
+        
+    }
 
     const handleAdd = async() => {
         
-        if(!event || !id){
-            setOut("select event");
+        if(!event ){
+            toast.error("select event");
+            eventRef.current.focus();
+            return;
+        }
+        if(!id ){
+            toast.error("enter ID");
             inputRef.current.focus();
             return;
         }
         try {
-            console.log("add click")
+           
             const res = await fetch(`${baseURL}/api/event/${event}/${id}`,{
             method : 'POST',
             credentials : 'include',
@@ -34,12 +57,15 @@ const AttendanceEvent = () => {
         })
         const status = await res.json();
         if(!res.ok){
-            setOut("not got")
+            throw new Error(status.error || 'participant not found')
+           
         }
-        console.log(status)
+        
+        outNotify(status)
+        
 
         } catch (err) {
-            setOut(err)
+           toast.error(err.message)
         } finally {
             inputRef.current.focus();
         }
@@ -51,13 +77,17 @@ const AttendanceEvent = () => {
         
         
     };
+    useEffect(() => {
+        if(event)
+        toast('set to '+event)
+    },[event])
     
   return (
     <div className="relative flex flex-col w-screen h-screen bg-red-600 justify-center items-center">
 
     <div  className="p-6 bg-white shadow-lg rounded-lg max-w-md mx-auto w-auto aspect-square ">
         <div className="mb-4">
-            <div className="text-lg font-semibold text-gray-700">{out}</div>
+            
             <h1 className="text-2xl font-bold text-center text-gray-800 mb-4">{event}</h1>
         </div>
 
@@ -84,6 +114,7 @@ const AttendanceEvent = () => {
             <select 
                 name="event" 
                 id="event" 
+                ref={eventRef}
                 onChange={(e) => setEvent(e.target.value)} 
                 className="mt-1 p-2 border rounded-lg focus:outline-none focus:ring-2"
             >
@@ -98,7 +129,7 @@ const AttendanceEvent = () => {
                 <optgroup label="Others">
                 <option value="food">food</option>
                 <option value="kit">kit</option>
-                <option value="certificate">certificate</option>
+                
                 </optgroup>
             </select>
 
