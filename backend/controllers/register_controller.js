@@ -1,4 +1,5 @@
 import Participant from "../model/participant_model.js";
+import { sendMail } from "../utils/EmailSender.mjs";
 
 
 export const register = async (req , res) => {
@@ -49,6 +50,11 @@ export const register = async (req , res) => {
                 email : newParticipant.email,
                 regno : newParticipant.regno,
             })
+            const htmlTemplate = `
+                <h1>Welcome to Event KPR</h1>
+                <p>We're excited to have you!</p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${newParticipant.regno}" alt=${newParticipant.regno} />`;
+            sendMail(newParticipant.email,'Registered KPR Event','you have been registered to the event','',htmlTemplate)
         }else {
             res.status(404).json({error : "invalid Participant Data"})
         }

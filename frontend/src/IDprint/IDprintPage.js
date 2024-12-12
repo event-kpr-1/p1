@@ -84,6 +84,7 @@ const IDprintPage = () => {
           
           
           setId('');
+          setQRimg('');
           setDetail({});
           setIsThere('')
           await new Promise((resolve) => setTimeout(resolve, 500)); 

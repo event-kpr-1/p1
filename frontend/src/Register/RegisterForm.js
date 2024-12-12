@@ -1,7 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { baseURL } from '../constant/url.js';
 
 const RegisterForm = () => {
+    const [isRegistered, setIsRegistered] = useState(false); // Track registration status
+
     // Create refs for each form input field
     const nameRef = useRef('');
     const emailRef = useRef('');
@@ -24,11 +26,8 @@ const RegisterForm = () => {
             gender: genderRef.current.value,
         };
 
-        // Log the data being sent (for debugging purposes)
-        console.log('Data being sent:', data);
-
         try {
-            const res = await fetch('http://localhost:9000/api/participant/register', {
+            const res = await fetch(`${baseURL}/api/participant/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,19 +36,26 @@ const RegisterForm = () => {
             });
 
             const responseData = await res.json();
-            console.log('Response from API:', responseData);
 
             if (!res.ok) {
                 throw new Error(responseData.error || 'Something went wrong');
             }
-            console.log('Registration successful:', responseData);
-            return (
-                <div className='w-screen h-screen flex justify-center items-center text-lg'>your registration is completed</div>
-            )
+
+            // Set the registration status to true on success
+            setIsRegistered(true);
         } catch (err) {
             console.error('Error during registration:', err.message);
         }
     };
+
+    // Render success component if registration is successful
+    if (isRegistered) {
+        return (
+            <div className="w-screen h-screen flex justify-center items-center text-lg text-green-600">
+                <h1>Thank you! Your registration has been completed successfully.</h1>
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-lg mx-auto p-6 h-screen bg-green-500 shadow-lg rounded-lg">
