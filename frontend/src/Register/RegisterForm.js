@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { baseURL } from '../constant/url.js';
+import toast from 'react-hot-toast'
 
 const RegisterForm = () => {
     const [isRegistered, setIsRegistered] = useState(false); // Track registration status
@@ -16,6 +17,8 @@ const RegisterForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        
+
         // Collect data only when the submit button is clicked
         const data = {
             name: nameRef.current.value,
@@ -25,6 +28,30 @@ const RegisterForm = () => {
             regno: regnoRef.current.value,
             gender: genderRef.current.value,
         };
+        if(!data.name){
+            toast.error('name missing')
+            nameRef.current.focus();
+            return
+        }else if(!data.email){
+            toast.error('email missing')
+            emailRef.current.focus();
+            return
+        }else if(!data.phone){
+            toast.error('phone missing')
+            phoneRef.current.focus();
+            return
+            
+        }else if(!data.college){
+            toast.error('college missing')
+            collegeRef.current.focus();
+            return
+            
+        }else if(!data.regno){
+            toast.error('regno missing')
+            regnoRef.current.focus();
+            return
+        
+        }
 
         try {
             const res = await fetch(`${baseURL}/api/participant/register`, {
@@ -42,9 +69,26 @@ const RegisterForm = () => {
             }
 
             // Set the registration status to true on success
+            toast.success('Registeration success')
             setIsRegistered(true);
         } catch (err) {
-            console.error('Error during registration:', err.message);
+            // console.error('Error during registration:', err.message);
+            toast.error(err.message)
+            switch (err.message){
+                case 'invalid email format' :
+                case 'email already exists' :
+                    emailRef.current.focus();
+                    break;
+                case 'regno already exists' :
+                    regnoRef.current.focus();
+                    break;
+                case 'invalid phone number' :
+                    phoneRef.current.focus();
+                    break;
+                
+                
+                        
+            }
         }
     };
 

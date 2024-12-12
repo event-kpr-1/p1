@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route , Routes} from 'react-router-dom'
+import {Toaster } from 'react-hot-toast'
 
 
 import HomePage from './HomePage'
@@ -25,6 +26,7 @@ const App = () => {
         <Route path = '/test' element = {<Test/>} />
     </Routes>
       
+    <Toaster/>
       
       
     </div>

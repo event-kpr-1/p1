@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { baseURL } from '../constant/url';
 import {BiQrScan} from 'react-icons/bi'
 import { scanner } from '../util/Functionalities';
+import toast from 'react-hot-toast'
 
 
 
@@ -21,6 +22,7 @@ const IDprintPage = () => {
     
     
     const handleSearch = async () => {
+
         try {
             // console.log("search click")
             const res = await fetch(`${baseURL}/api/provider/printid/${id}`,{

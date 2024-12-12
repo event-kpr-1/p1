@@ -17,8 +17,11 @@ export const register = async (req , res) => {
         //check for existing participant
         const existingEmail = await Participant.findOne({email : email})
         const existingRegno = await Participant.findOne({regno : regno})
-        if(existingEmail || existingRegno){
-            return res.status(400).json({error : "already exists"})
+        if(existingEmail ){
+            return res.status(400).json({error : "email already exists"})
+        }
+        if(existingRegno ){
+            return res.status(400).json({error : "regno already exists"})
         }
 
         const phonenoRegex = /^\d{10}$/
