@@ -46,18 +46,30 @@ export const register = async (req , res) => {
         if(newParticipant){
             
             await newParticipant.save();
-            res.status(200).json({
-                _id : newParticipant.id,
-                name : newParticipant.name,
-                gender : newParticipant.gender,
-                email : newParticipant.email,
-                regno : newParticipant.regno,
-            })
             const htmlTemplate = `
                 <h1>Welcome to Event KPR</h1>
                 <p>We're excited to have you!</p>
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${newParticipant.regno}" alt=${newParticipant.regno} />`;
-            sendMail(newParticipant.email,'Registered KPR Event','you have been registered to the event','',htmlTemplate)
+            // sendMail(newParticipant.email,'Registered KPR Event','you have been registered to the event','',htmlTemplate)
+
+            
+                // sendMail(newParticipant.email, 'Registered KPR Event', 'You have been registered to the event', '', htmlTemplate);
+                // console.log('Email sent successfully to:', newParticipant.email);
+                // console.log('Email sent successfully to:', newParticipant.regno);
+                await  sendMail(newParticipant.email, 'Registered KPR Event', 'You have been registered to the event', '', htmlTemplate)
+                        .then(() => console.log('Email sent successfully!'))
+                        .catch(err => console.error('Failed to send email:', err));
+
+                
+                res.status(200).json({
+                    _id : newParticipant.id,
+                    name : newParticipant.name,
+                    gender : newParticipant.gender,
+                    email : newParticipant.email,
+                    regno : newParticipant.regno,
+                })
+            
+
         }else {
             res.status(404).json({error : "invalid Participant Data"})
         }

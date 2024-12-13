@@ -1,37 +1,47 @@
 import nodemailer from 'nodemailer';
 
-export const sendMail = async (toAddress, sub, msg = '',imageUrl = '',htmlTemplate = '') => {
-  // Create a transporter
+export const sendMail = async (toAddress, sub, msg = '', imageUrl = '', htmlTemplate = '') => {
+  console.log('Preparing to send email...');
+  
   const transporter = nodemailer.createTransport({
-    service: 'gmail', // Use your preferred email service
+    service: 'gmail', // Gmail service
     auth: {
-      user: 'event6803@gmail.com', // Replace with your email
-      pass: 'xfpgsrisyfvjymaa', // Replace with your password or app password
+      user: process.env.EMAIL_USER, // Environment variable for email
+      pass: process.env.EMAIL_PASS, // Environment variable for app password
     },
   });
 
-  // Define email details
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error('Transporter verification failed:', error);
+    } else {
+      console.log('Transporter verified successfully:', success);
+    }
+  });
+
   const mailOptions = {
-    from: '"event kpr" <event6803@gmail.com>', // Sender's address
-    to: toAddress, // Recipient's address (string)
-    subject: sub, // Subject line (string)
-    text: msg, // Email body (string)
-    ...(htmlTemplate && { html: htmlTemplate }),
+    from: '"Event 123 KPR" <event6803@gmail.com>', // Sender's email
+    to: toAddress, // Recipient's email
+    subject: sub, // Subject line
+    text: msg, // Plain text message
+    ...(htmlTemplate && { html: htmlTemplate }), // Optional HTML template
     attachments: imageUrl
       ? [
           {
-            filename: 'yourID.jpg', // You can rename the file if needed
-            path: imageUrl, // URL or local file path
+            filename: 'yourID.jpg', // Attachment filename
+            path: imageUrl, // File path or URL
           },
         ]
-      : [],
+      : [], // No attachments if imageUrl is empty
   };
 
-  // Send the email
   try {
+    console.log('Sending email with options:', mailOptions);
     const info = await transporter.sendMail(mailOptions);
     console.log('Email sent successfully:', info.response);
+    return info; // Optional: Return info for further use
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('Error sending email:', error.message);
+    throw error; // Throw error to handle it in calling code
   }
 };
