@@ -1,11 +1,13 @@
 import express from 'express'
 
 // controllers
-import {attended} from '../controllers/attendance_controller.js'
+import {attended , validEvent} from '../controllers/attendance_controller.js'
+import eventProtection from '../middleware/eventProtection_Route.js'
 
 const router = express.Router();
 
-router.post("/:event/:id" , attended)
+router.post("/:evid/:event/:id" ,eventProtection, attended)
+router.get("/:evid",eventProtection,validEvent)
 
 
 export default router;

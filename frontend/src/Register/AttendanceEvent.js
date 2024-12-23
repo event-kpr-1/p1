@@ -1,5 +1,5 @@
 import React, { useState , useRef, useEffect } from 'react'
-import { baseURL } from '../constant/url';
+import { baseURL, eventURL } from '../constant/url';
 import toast from 'react-hot-toast';
 
 import {BiQrScan} from 'react-icons/bi'
@@ -7,7 +7,7 @@ import { scanner } from '../util/Functionalities'
 
 
 
-const AttendanceEvent = () => {
+const AttendanceEvent = ({eventID}) => {
    
     const [id,setId] = useState('');
     const [event,setEvent] = useState('');
@@ -47,21 +47,21 @@ const AttendanceEvent = () => {
         }
         try {
            
-            const res = await fetch(`${baseURL}/api/event/${event}/${id}`,{
-            method : 'POST',
-            credentials : 'include',
-            headers : {
-                "Content-Type" : "application/json"
-            },
+            const res = await fetch(`${baseURL}/api/event/${eventID || eventURL}/${event}/${id}`,{
+                method : 'POST',
+                credentials : 'include',
+                headers : {
+                    "Content-Type" : "application/json"
+                },
             
-        })
-        const status = await res.json();
-        if(!res.ok){
-            throw new Error(status.error || 'participant not found')
-           
-        }
-        
-        outNotify(status)
+            })
+            const status = await res.json();
+            if(!res.ok){
+                throw new Error(status.error || 'participant not found')
+            
+            }
+            
+            outNotify(status)
         
 
         } catch (err) {

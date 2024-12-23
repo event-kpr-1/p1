@@ -1,5 +1,5 @@
-import React from 'react'
-import { Route , Routes} from 'react-router-dom'
+import React, { useState } from 'react'
+import { Route , Routes , } from 'react-router-dom'
 import {Toaster } from 'react-hot-toast'
 
 
@@ -10,17 +10,19 @@ import AttendanceEvent from './Register/AttendanceEvent'
 import RegisterForm from './Register/RegisterForm'
 
 
-import Test from './Test'
+// import Test from './Test'
 
 const App = () => {
+  const [eventID , setEventID] = useState()
+
   return (
     
     <div>
       <Routes>
-        <Route path = '/' element={<HomePage/>}/>
-        <Route path = '/printid' element = {<IDprintPage />} />
-        <Route path = '/register' element = {<RegisterForm/>} />
-        <Route path = '/attendance' element = {<AttendanceEvent/>} />
+        <Route path = '/:evid/home' element={<HomePage setEventID={setEventID}/>}/>
+        <Route path = '/printid' element = {<IDprintPage eventID={eventID}/>} />
+        <Route path = '/register' element = {<RegisterForm eventID={eventID} />} />
+        <Route path = '/attendance' element = {<AttendanceEvent eventID={eventID} />} />
        
         
         <Route path = '/qrscan' element = {<QRscan/>} />

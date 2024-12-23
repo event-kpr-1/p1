@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { baseURL } from '../constant/url.js';
+import { baseURL, eventURL } from '../constant/url.js';
 import toast from 'react-hot-toast'
 
-const RegisterForm = () => {
+const RegisterForm = ({eventID}) => {
     const [isRegistered, setIsRegistered] = useState(false); // Track registration status
 
     // Create refs for each form input field
@@ -54,7 +54,7 @@ const RegisterForm = () => {
         }
 
         try {
-            const res = await fetch(`${baseURL}/api/participant/register`, {
+            const res = await fetch(`${baseURL}/api/participant/${eventID || eventURL}/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -84,10 +84,7 @@ const RegisterForm = () => {
                     break;
                 case 'invalid phone number' :
                     phoneRef.current.focus();
-                    break;
-                
-                
-                        
+                    break;        
             }
         }
     };

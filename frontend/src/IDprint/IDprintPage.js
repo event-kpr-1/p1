@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { baseURL } from '../constant/url';
+import { baseURL ,eventURL} from '../constant/url';
 import {BiQrScan} from 'react-icons/bi'
 import { scanner } from '../util/Functionalities';
 import toast from 'react-hot-toast'
@@ -8,7 +8,7 @@ import toast from 'react-hot-toast'
 
 
 
-const IDprintPage = () => {
+const IDprintPage = ({eventID}) => {
     const [id, setId] = useState('');
     const [QRimg,setQRimg] = useState('')
     const [detail,setDetail] = useState({})
@@ -28,8 +28,9 @@ const IDprintPage = () => {
         return;
       }
         try {
-            // console.log("search click")
-            const res = await fetch(`${baseURL}/api/provider/printid/${id}`,{
+            console.log("search click")
+            // console.log(baseURL)
+            const res = await fetch(`${baseURL}/api/provider/${eventID || eventURL}/printid/${id}`,{
                 method : "GET",
                 credentials : 'include',
                 headers : {
@@ -39,7 +40,10 @@ const IDprintPage = () => {
             
             const participant = await res.json();
             if(!res.ok){
+              
+              console.log(participant.error)
               throw new Error(participant.error || "data not found")
+
             }
             setDetail(participant)
             setIsThere(participant.name)
@@ -151,9 +155,9 @@ const IDprintPage = () => {
     else{
         return(
         <div>
-            <p>hi you are {id}</p>
+            <p>hi you are {detail.name}</p>
             <img src={QRimg} alt={id} />
-            <p>{detail.name}</p>
+            <p>{detail.regno}</p>
             <p>{detail.phone}</p>
             <p>{detail.college}</p>
             <p>{detail.email}</p>

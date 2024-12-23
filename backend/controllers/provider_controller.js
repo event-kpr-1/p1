@@ -1,10 +1,10 @@
 import Participant from "../model/participant_model.js";
 export const printid = async(req , res) => {
     try {
-        const {regno} = req.params;
-        const participant = await Participant.findOne({regno : regno})
+        const {regno , evid} = req.params;
+        const participant = regno.length === 24 ? await Participant.findOne({_id : regno}) : await Participant.findOne({regno : regno})
         
-        if(!participant){
+        if(!participant || participant.eventID.toString() !== evid.toString()){
             return res.status(404).json({error : "participant not found"})
         }
         console.log(participant)
@@ -26,7 +26,8 @@ export const printid = async(req , res) => {
 export const printcertificate = async(req , res) => {
     try {
         const {regno} = req.params;
-        const participant = await Participant.findOne({regno : regno})
+        const participant = regno.length === 24 ? await Participant.findOne({_id : regno}) : await Participant.findOne({regno : regno})
+
         
         if(!participant){
             return res.status(404).json({error : "participant not found"})

@@ -9,7 +9,7 @@ const ParticipantSchema = mongoose.Schema({
     email : {
         type : String,
         required : true,
-        unique : true
+        
     },
     college : {
         type : String,
@@ -28,7 +28,7 @@ const ParticipantSchema = mongoose.Schema({
     regno : {
         type : String,
         required : true,
-        unique : true
+        
     },
     
     team : [{
@@ -56,6 +56,10 @@ const ParticipantSchema = mongoose.Schema({
         type : Number,
         default : 0
 
+    },
+    eventID : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'Event'
     }
 
     

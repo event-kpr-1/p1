@@ -1,10 +1,11 @@
 import Participant from "../model/participant_model.js";
-
+import Event from "../model/NewEventModel.js";
 export const attended = async(req , res) => {
     try {
-        const {event , id} = req.params;
-        const participant = await Participant.findOne({regno : id})
-        if(!participant){
+        const {event , id , evid} = req.params;
+        
+        const participant = (id.length===24) ? await Participant.findOne({_id : id}) : await Participant.findOne({regno : id})
+        if(!participant || participant.eventID.toString() !== evid.toString()){
             return res.status(404).json({error : "participant not found"})
         }
         
@@ -38,4 +39,16 @@ export const attended = async(req , res) => {
         // console.log(err)
         res.status(400).json({error : err})
     }
+}
+
+export const validEvent = async(req, res) => {
+    try {
+        const {evid} = req.params;
+        const event = await Event.findOne({_id : evid})
+        return res.status(200).json({event})
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({error: 'internal server error'})
+    }
+    
 }
