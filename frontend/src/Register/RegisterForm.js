@@ -92,131 +92,92 @@ const RegisterForm = ({eventID}) => {
     // Render success component if registration is successful
     if (isRegistered) {
         return (
-            <div className="w-screen h-screen flex justify-center items-center text-lg text-green-600">
-                <h1>Thank you! Your registration has been completed successfully.</h1>
+            <div className="flex justify-center items-center h-screen">
+                <h1 className="text-green-600 text-xl font-bold">Thank you! Your registration has been completed successfully.</h1>
             </div>
         );
     }
 
     return (
-        <div className="max-w-lg mx-auto p-6 h-screen bg-green-500 shadow-lg rounded-lg">
-            <h2 className="text-2xl font-bold text-center mb-6">Registration Form</h2>
-
-            <form className="space-y-5 border-2 p-4 rounded-2xl">
-                {/* Name Input */}
-                <div>
-                    <label htmlFor="Name" className="block text-sm font-medium text-black">
-                        Name:
-                    </label>
-                    <input
-                        type="text"
-                        name="name"
-                        id="Name"
-                        placeholder="Your name"
-                        autoComplete="on"
-                        ref={nameRef} // Store the value in this ref
-                        required
-                        className="mt-1 block w-full rounded-md border-white border-2 shadow-sm focus:border-indigo-500 p-2 bg-inherit"
-                    />
-                </div>
-
-                {/* Email Input */}
-                <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-black">
-                        Email:
-                    </label>
-                    <input
-                        type="email"
-                        name="email"
-                        id="email"
-                        placeholder="abc@gmail.com"
-                        ref={emailRef} // Store the value in this ref
-                        autoComplete="on"
-                        className="mt-1 block w-full rounded-md border-white border-2 shadow-sm focus:border-indigo-500 p-2 bg-inherit"
-                    />
-                </div>
-
-                {/* Phone Number Input */}
-                <div>
-                    <label htmlFor="phonenumber" className="block text-sm font-medium text-black">
-                        Mobile:
-                    </label>
-                    <input
-                        type="tel"
-                        name="phone"
-                        id="phonenumber"
-                        placeholder="1236547890"
-                        ref={phoneRef} // Store the value in this ref
-                        pattern="[0-9]{10}"
-                        required
-                        autoComplete="on"
-                        className="mt-1 block w-full rounded-md border-white border-2 shadow-sm focus:border-indigo-500 p-2 bg-inherit"
-                    />
-                </div>
-
-                {/* College Name Input */}
-                <div>
-                    <label htmlFor="college_name" className="block text-sm font-medium text-black">
-                        College Name:
-                    </label>
-                    <input
-                        type="text"
-                        name="college"
-                        id="college_name"
-                        placeholder="Your college name"
-                        ref={collegeRef} // Store the value in this ref
-                        autoComplete="on"
-                        required
-                        className="mt-1 block w-full rounded-md border-white border-2 shadow-sm focus:border-indigo-500 p-2 bg-inherit "
-                    />
-                </div>
-
-                {/* Gender Select */}
-                <div>
-                    <label htmlFor="select" className="block text-sm font-medium text-black">
-                        Gender:
-                    </label>
-                    <select
-                        name="gender"
-                        id="select"
-                        ref={genderRef} // Store the value in this ref
-                        className="mt-1 block w-full rounded-md border-white border-2 shadow-sm focus:border-indigo-500 p-2 bg-inherit"
-                    >
-                        <option value="M">MALE</option>
-                        <option value="F">FEMALE</option>
-                        <option value="O">OTHERS</option>
-                    </select>
-                </div>
-
-                {/* Register Number Input */}
-                <div>
-                    <label htmlFor="Register_no" className="block text-sm font-medium text-black">
-                        Register Number:
-                    </label>
-                    <input
-                        type="text"
-                        name="regno"
-                        id="Register_no"
-                        placeholder="Your register number"
-                        ref={regnoRef} // Store the value in this ref
-                        autoComplete="on"
-                        required
-                        className="mt-1 block w-full rounded-md border-white border-2 shadow-sm focus:border-indigo-500 p-2 bg-inherit"
-                    />
-                </div>
-
-                {/* Submit Button */}
-                <div className="text-center">
-                    <button
-                        type="submit"
-                        className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-md focus:outline-none focus:ring-2 p-2  border focus:ring-offset-2"
-                        onClick={handleSubmit} // Handle the submission
-                    >
-                        Submit
-                    </button>
-                </div>
-            </form>
-        </div>
+        <div className="flex justify-center items-center h-screen bg-gradient-to-r from-green-400 via-green-500 to-teal-500">
+      <div className="w-full max-w-lg p-8 bg-white rounded-lg shadow-lg">
+        <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">Registration Form</h2>
+        <form className="space-y-6">
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name:</label>
+            <input
+              type="text"
+              id="name"
+              placeholder="Your name"
+              ref={nameRef}
+              className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-300 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="abc@example.com"
+              ref={emailRef}
+              className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-300 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone:</label>
+            <input
+              type="tel"
+              id="phone"
+              placeholder="1234567890"
+              ref={phoneRef}
+              pattern="[0-9]{10}"
+              className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-300 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label htmlFor="college" className="block text-sm font-medium text-gray-700">College Name:</label>
+            <input
+              type="text"
+              id="college"
+              placeholder="Your college name"
+              ref={collegeRef}
+              className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-300 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label htmlFor="gender" className="block text-sm font-medium text-gray-700">Gender:</label>
+            <select
+              id="gender"
+              ref={genderRef}
+              className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-300 focus:outline-none"
+            >
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+              <option value="O">Other</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="regno" className="block text-sm font-medium text-gray-700">Register Number:</label>
+            <input
+              type="text"
+              id="regno"
+              placeholder="Your register number"
+              ref={regnoRef}
+              className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-300 focus:outline-none"
+            />
+          </div>
+          <div className="text-center">
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="w-full py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 focus:ring focus:ring-green-300 focus:outline-none"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
     );
 };
 
