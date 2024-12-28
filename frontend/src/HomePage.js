@@ -5,9 +5,13 @@ import { baseURL ,eventURL} from './constant/url';
 const HomePage = ({setEventID}) => {
     
     const navigate = useNavigate();
-    const [event,setEvent] = useState(true)
+    const [event,setEvent] = useState(false)
     const {evid} = useParams();
     const isValidEvent = async() => {
+        if(process.env.NODE_ENV !== 'production' && evid === 'test'){
+            setEvent(true);
+            return
+        }
         try {
             const response = await fetch(`${baseURL}/api/event/${evid}`,{
                 method : 'GET',
@@ -17,9 +21,10 @@ const HomePage = ({setEventID}) => {
                 }
             })
             const data = await response.json();
-            console.log(data  ,"paru"  )
+            // console.log("paru",data    )
             if(response.ok){
-                setEvent(true)
+                setEvent(data)
+                console.log(event)
                 setEventID(evid)
             }else{
                 setEvent(false)
@@ -43,8 +48,13 @@ const HomePage = ({setEventID}) => {
         }
     };
     const handleNavigate = (path) => {
-        handlePassword() && navigate(path)
+        if(process.env.NODE_ENV !== 'production'){
+            navigate(path)
+        }else{
+            handlePassword() && navigate(path)
+        }
     }
+
 
     useEffect(() => {isValidEvent()},[])
    
@@ -80,8 +90,8 @@ const HomePage = ({setEventID}) => {
             </main>
 
             {/* Footer */}
-            <footer className="fixed bottom-0 left-0 w-full bg-green-500 shadow-md py-3 text-center text-sm font-semibold z-10">
-                TECH BLAST
+            <footer className="fixed bottom-0 left-0 w-full bg-green-500 shadow-md py-3 text-center text-md  z-10 uppercase font-bold">
+                {event.event.eventName}
             </footer>
         </div>
 

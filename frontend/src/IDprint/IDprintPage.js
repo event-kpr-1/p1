@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { baseURL ,eventURL} from '../constant/url';
 import {BiQrScan} from 'react-icons/bi'
 import { scanner } from '../util/Functionalities';
+import { useReactToPrint } from 'react-to-print';
 import toast from 'react-hot-toast'
 
 
@@ -14,8 +15,9 @@ const IDprintPage = ({eventID}) => {
     const [detail,setDetail] = useState({})
     const [isThere,setIsThere] = useState('')
     
-    const [dispPage, setDispPage ] =useState(true)
-    const inputRef = useRef();
+    
+    const inputRef = useRef(null);
+    const printRef = useRef(null)
 
     const scannerRef = useRef('null')
     const qrCodeRegionId = "qr-reader";
@@ -72,99 +74,80 @@ const IDprintPage = ({eventID}) => {
         }
       
         try {
-          
-          
-      
-          
-          // await new Promise((resolve) => setTimeout(resolve, 100));
-      
-          
-          setDispPage(false);
-      
-          
-          await new Promise((resolve) => setTimeout(resolve, 500));
-      
-          
-          window.print();
-      
-          
-          await new Promise((resolve) => setTimeout(resolve, 500)); 
-          
-          setDispPage(true);
-          
-          
-          toast.success('done ✔')
-          setId('');
-          setQRimg('');
-          setDetail({});
-          setIsThere('')
-          await new Promise((resolve) => setTimeout(resolve, 500)); 
-          inputRef.current.focus();
-      
+            print();
         } catch (err) {
           toast.error(err.message)
         }
       };
+      const print = useReactToPrint({
+        contentRef : printRef,
+        onAfterPrint : () => {
+            toast.success('done ✔')
+            setId('');
+            setQRimg('');
+            setDetail({});
+            setIsThere('')
+            
+            inputRef.current.focus();}
+      })
       
       
       
     
-      if (dispPage) {
+      
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-lg ">
-                    <div className="mb-6">
-                        <label htmlFor="Printid" className="block text-lg font-semibold text-gray-700">
-                            Enter ID:
-                        </label>
-                        <div className="flex items-center gap-3 mt-3">
-                            <input
-                                type="text"
-                                id="Printid"
-                                value={id}
-                                onChange={(e) => setId(e.target.value)}
-                                ref={inputRef}
-                                className="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                placeholder="Enter ID"
-                            />
-                            <button
-                                onClick={handleScan}
-                                className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                            >
-                                <BiQrScan size={24} />
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="flex justify-between mt-6">
+        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-lg ">
+                <div className="mb-6">
+                    <label htmlFor="Printid" className="block text-lg font-semibold text-gray-700">
+                        Enter ID:
+                    </label>
+                    <div className="flex items-center gap-3 mt-3">
+                        <input
+                            type="text"
+                            id="Printid"
+                            value={id}
+                            onChange={(e) => setId(e.target.value)}
+                            ref={inputRef}
+                            className="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            placeholder="Enter ID"
+                        />
                         <button
-                            onClick={handleSearch}
-                            className="w-1/2 py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            onClick={handleScan}
+                            className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
                         >
-                            Search
+                            <BiQrScan size={24} />
                         </button>
-                        <button
-                            onClick={handlePrint}
-                            className="w-1/2 py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 ml-3"
-                        >
-                            Print
-                        </button>
-                    </div>
-
-                    <p className="text-center text-gray-600 font-medium mt-4">{isThere}</p>
-                    <div
-                        ref={scannerRef}
-                        id={qrCodeRegionId}
-                        className="mt-6 aspect-square h-48 bg-gray-200 rounded-lg flex items-center justify-center mx-auto"
-                    >
-                        
                     </div>
                 </div>
+
+                <div className="flex justify-between mt-6">
+                    <button
+                        onClick={handleSearch}
+                        className="w-1/2 py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    >
+                        Search
+                    </button>
+                    <button
+                        onClick={handlePrint}
+                        className="w-1/2 py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 ml-3"
+                    >
+                        Print
+                    </button>
+                </div>
+
+                <p className="text-center text-gray-600 font-medium mt-4">{isThere}</p>
+                <div
+                    ref={scannerRef}
+                    id={qrCodeRegionId}
+                    className="mt-6 aspect-square h-48 bg-gray-200 rounded-lg flex items-center justify-center mx-auto"
+                >
+                    
+                </div>
             </div>
-        );
-    } else {
-        return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+            {/* ID CARD  */}
+            <div className='hidden'>
+                <div ref={printRef} className=" min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">Participant Details</h2>
                 <img src={QRimg} alt={id} className="w-32 h-32 mb-4" />
                 <p className="text-gray-700">Name: {detail.name}</p>
@@ -172,9 +155,12 @@ const IDprintPage = ({eventID}) => {
                 <p className="text-gray-700">Phone: {detail.phone}</p>
                 <p className="text-gray-700">College: {detail.college}</p>
                 <p className="text-gray-700">Email: {detail.email}</p>
+
             </div>
-        );
-    }
+        </div>
+    </div>
+    );
+     
     
 };
 export default IDprintPage;
