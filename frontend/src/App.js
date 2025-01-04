@@ -1,36 +1,21 @@
-import React, { useState } from 'react'
-import { Route , Routes , } from 'react-router-dom'
+import React from 'react'
+import { Route , Routes } from 'react-router-dom'
 import {Toaster } from 'react-hot-toast'
-
-
-import HomePage from './HomePage'
-import IDprintPage from './IDprint/IDprintPage'
-import QRscan from './IDprint/QRscan'
-import AttendanceEvent from './Register/AttendanceEvent'
-import RegisterForm from './Register/RegisterForm'
-
-
-
-// import Test from './Test'
+import MainApp from './MainApp.js'
 
 const App = () => {
-  const [eventID , setEventID] = useState()
+
+  
 
   return (
     
     <div>
       <Routes>
-        <Route path = '/:evid/home' element={<HomePage setEventID={setEventID}/>}/>
-        <Route path = '/printid' element = {<IDprintPage eventID={eventID}/>} />
-        <Route path = '/register' element = {<RegisterForm eventID={eventID} />} />
-        <Route path = '/attendance' element = {<AttendanceEvent eventID={eventID} />} />
        
+        <Route path = '/:evid/*' element = {<MainApp/>} />
+      </Routes>
         
-        <Route path = '/qrscan' element = {<QRscan/>} />
-        {/* <Route path = '/test' element = {<Test/>} /> */}
-    </Routes>
-      
-    <Toaster/>
+      <Toaster/>
       
       
     </div>

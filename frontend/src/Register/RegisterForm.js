@@ -1,9 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState , useContext } from 'react';
 import { baseURL, eventURL } from '../constant/url.js';
 import toast from 'react-hot-toast'
+import {EventContext} from '../MainApp.js'
 
-const RegisterForm = ({eventID}) => {
+const RegisterForm = () => {
     const [isRegistered, setIsRegistered] = useState(false); // Track registration status
+    
+    const {eventDetail} = useContext(EventContext)
 
     // Create refs for each form input field
     const nameRef = useRef('');
@@ -12,6 +15,7 @@ const RegisterForm = ({eventID}) => {
     const collegeRef = useRef('');
     const regnoRef = useRef('');
     const genderRef = useRef('');
+    const departmentRef = useRef('');
 
     // Handle form submission
     const handleSubmit = async (e) => {
@@ -27,6 +31,7 @@ const RegisterForm = ({eventID}) => {
             college: collegeRef.current.value,
             regno: regnoRef.current.value,
             gender: genderRef.current.value,
+            department: departmentRef.current.value,
         };
         if(!data.name){
             toast.error('name missing')
@@ -46,7 +51,7 @@ const RegisterForm = ({eventID}) => {
             collegeRef.current.focus();
             return
             
-        }else if(!data.regno){
+        }else if(eventDetail.event?.eventFor==='Students' && !data.regno){
             toast.error('regno missing')
             regnoRef.current.focus();
             return
@@ -54,7 +59,7 @@ const RegisterForm = ({eventID}) => {
         }
 
         try {
-            const res = await fetch(`${baseURL}/api/participant/${eventID || eventURL}/register`, {
+            const res = await fetch(`${baseURL}/api/participant/${eventDetail._id || eventURL}/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -84,10 +89,14 @@ const RegisterForm = ({eventID}) => {
                     break;
                 case 'invalid phone number' :
                     phoneRef.current.focus();
-                    break;        
+                    break;  
+                default :      
+                    break;
             }
         }
     };
+
+    
 
     // Render success component if registration is successful
     if (isRegistered) {
@@ -97,12 +106,14 @@ const RegisterForm = ({eventID}) => {
             </div>
         );
     }
-
+    
     return (
         <div className="flex justify-center items-center h-screen bg-gradient-to-r from-green-400 via-green-500 to-teal-500">
       <div className="w-full max-w-lg p-8 bg-white rounded-lg shadow-lg">
         <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">Registration Form</h2>
         <form className="space-y-6">
+
+          {/* NAME */}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name:</label>
             <input
@@ -113,6 +124,7 @@ const RegisterForm = ({eventID}) => {
               className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-300 focus:outline-none"
             />
           </div>
+          {/* EMAIL */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
             <input
@@ -123,6 +135,7 @@ const RegisterForm = ({eventID}) => {
               className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-300 focus:outline-none"
             />
           </div>
+          {/* PHONE NUMBER */}
           <div>
             <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone:</label>
             <input
@@ -134,13 +147,25 @@ const RegisterForm = ({eventID}) => {
               className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-300 focus:outline-none"
             />
           </div>
+          {/* COLLEGE */}
           <div>
-            <label htmlFor="college" className="block text-sm font-medium text-gray-700">College Name:</label>
+            <label htmlFor="college" className="block text-sm font-medium text-gray-700">{eventDetail.event?.eventFor === 'Students'?'':'School / '}College Name:</label>
             <input
               type="text"
               id="college"
               placeholder="Your college name"
               ref={collegeRef}
+              className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-300 focus:outline-none"
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="department" className="block text-sm font-medium text-gray-700">Department:</label>
+            <input
+              type="text"
+              id="department"
+              placeholder="Your register number"
+              ref={departmentRef}
               className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-300 focus:outline-none"
             />
           </div>
@@ -156,7 +181,9 @@ const RegisterForm = ({eventID}) => {
               <option value="O">Other</option>
             </select>
           </div>
-          <div>
+
+          {eventDetail.event?.eventFor === 'Students' &&
+          (<div>
             <label htmlFor="regno" className="block text-sm font-medium text-gray-700">Register Number:</label>
             <input
               type="text"
@@ -165,7 +192,7 @@ const RegisterForm = ({eventID}) => {
               ref={regnoRef}
               className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-300 focus:outline-none"
             />
-          </div>
+          </div>)}
           <div className="text-center">
             <button
               type="submit"
@@ -178,7 +205,7 @@ const RegisterForm = ({eventID}) => {
         </form>
       </div>
     </div>
-    );
+    )
 };
 
 export default RegisterForm;

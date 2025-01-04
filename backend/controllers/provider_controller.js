@@ -1,3 +1,4 @@
+import Event from "../model/NewEventModel.js";
 import Participant from "../model/participant_model.js";
 export const printid = async(req , res) => {
     try {
@@ -9,14 +10,7 @@ export const printid = async(req , res) => {
         }
         console.log(participant)
 
-        res.status(200).json({
-            _id : participant.id,
-            name : participant.name,
-            college : participant.college,
-            email : participant.email,
-            regno : participant.regno,
-            phone : participant.phone
-        })
+        res.status(200).json(participant)
     } catch (err) {
         console.log(`error at resShow-register-controller : ${err}` );
         res.status(400).json({error : "internal server error"});
@@ -37,6 +31,15 @@ export const printcertificate = async(req , res) => {
         res.status(200).json({participated : participant.participated})
     } catch (err) {
         console.log(`error at resShow-register-controller : ${err}` );
+        res.status(400).json({error : "internal server error"});
+    }
+}
+
+export const getEvent = async(req , res) => {
+    try {
+        return res.json({event : req?.event || 'not found'})
+    } catch (error) {
+        console.log(`error at getevent-register-controller : ${err}` );
         res.status(400).json({error : "internal server error"});
     }
 }

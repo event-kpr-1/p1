@@ -3,25 +3,46 @@ import mongoose from "mongoose";
 const NewEventSchema = mongoose.Schema({
     eventName : {
         type : String,
-        require : true
+        required : true
+    },
+    eventDetails : {
+        type : String,
+        required : true
+    },
+    eventDate : {
+        type : Date,
+        default : Date.now
+    },
+    expectedParticipantCount : {
+        type : Number,
+        default : 0
+    },
+    eventCoordinators : [{
+        name :{type : String},
+        email :{type : String},
+        phone :{type : String},
+        default : []
+    }],
+    eventFor : {
+        type : String
     },
     subEvents : [
         {
-            type : mongoose.Schema.Types.ObjectId,
-            ref : "Event",
+            evName : {
+                type : String,
+            },
+            evDesc : {
+                type : String,
+            },
             default : []
         }
     ],
-    eventDetails : {
-        type : String,
-        require : true
-    },
     createdBy : {
         type : mongoose.Schema.Types.ObjectId,
         ref : "AdminUser",
-        require : true
+        required : true
     }
-},{timestamp : true})
+},{timestamps : true})
 
 const Event = mongoose.model('Event' , NewEventSchema);
 export default Event;

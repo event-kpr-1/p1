@@ -4,10 +4,10 @@ import { sendMail } from "../utils/EmailSender.mjs";
 
 export const register = async (req , res) => {
     try {
-        const {name , email , college , gender , regno, phone} = req.body
+        const {name , email , college , gender , regno, phone , department} = req.body
         const {evid} = req.params;
         
-        console.log(name,email,college,gender,regno,phone)
+        console.log(name,email,college,gender,regno,phone,department)
         
 
         //validating the email 
@@ -41,7 +41,8 @@ export const register = async (req , res) => {
             phone : phone,
             gender : gender,
             regno : regno,
-            eventID : evid
+            eventID : evid,
+            department : department
             
             
         })

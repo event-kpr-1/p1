@@ -45,6 +45,7 @@ export const validEvent = async(req, res) => {
     try {
         const {evid} = req.params;
         const event = await Event.findOne({_id : evid})
+        console.log(event)
         return res.status(200).json({event})
     } catch (err) {
         console.log(err)

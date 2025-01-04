@@ -30,6 +30,11 @@ const ParticipantSchema = mongoose.Schema({
         required : true,
         
     },
+    department : {
+        type : String,
+        required : true,
+        
+    },
     
     team : [{
         type : mongoose.Schema.Types.ObjectId,

@@ -1,16 +1,20 @@
-import React, { useState , useRef, useEffect } from 'react'
+import React, { useState , useRef, useEffect , useContext } from 'react'
 import { baseURL, eventURL } from '../constant/url';
 import toast from 'react-hot-toast';
 
+
 import {BiQrScan} from 'react-icons/bi'
 import { scanner } from '../util/Functionalities'
+import {EventContext } from '../MainApp.js'
 
 
-
-const AttendanceEvent = ({eventID}) => {
-   
+const AttendanceEvent = () => {
+    const {eventDetail} = useContext(EventContext)
     const [id,setId] = useState('');
     const [event,setEvent] = useState('');
+    const events = eventDetail.event.subEvents ||[];
+
+
     const inputRef = useRef();
     const eventRef = useRef();
     const scannerRef = useRef('null')
@@ -47,7 +51,7 @@ const AttendanceEvent = ({eventID}) => {
         }
         try {
            
-            const res = await fetch(`${baseURL}/api/event/${eventID || eventURL}/${event}/${id}`,{
+            const res = await fetch(`${baseURL}/api/event/${eventDetail.event._id || eventURL}/${event}/${id}`,{
                 method : 'POST',
                 credentials : 'include',
                 headers : {
@@ -77,10 +81,16 @@ const AttendanceEvent = ({eventID}) => {
         
         
     };
+
+    
+
+   
     useEffect(() => {
         if(event)
         toast('set to '+event)
+        
     },[event])
+    
     
   return (
     <div className="relative flex flex-col w-screen h-screen bg-red-600 justify-center items-center">
@@ -118,15 +128,14 @@ const AttendanceEvent = ({eventID}) => {
                 onChange={(e) => setEvent(e.target.value)} 
                 className="mt-1 p-2 border rounded-lg focus:outline-none focus:ring-2"
             >
-                <optgroup label="Events">
+                {events.length &&
+                (<optgroup label="Events">
                 <option value="">--SELECT EVENT--</option>
-                <option value="EV1">e1</option>
-                <option value="EV2">e2</option>
-                <option value="EV3">e3</option>
-                <option value="EV4">e4</option>
-                </optgroup>
+                {events.map((eve, index) => (<option value={`${eve.evName}`} key={index}>{eve.evName || 'summa'}</option>))}
+                </optgroup>)}
 
                 <optgroup label="Others">
+                {!events.length &&(<option value="">--SELECT--</option>)}
                 <option value="food">food</option>
                 <option value="kit">kit</option>
                 

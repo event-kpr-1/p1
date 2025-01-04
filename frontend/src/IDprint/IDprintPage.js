@@ -1,15 +1,18 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef , useContext } from 'react';
 import { baseURL ,eventURL} from '../constant/url';
 import {BiQrScan} from 'react-icons/bi'
 import { scanner } from '../util/Functionalities';
 import { useReactToPrint } from 'react-to-print';
 import toast from 'react-hot-toast'
 
+import { EventContext } from '../MainApp';
 
 
 
 
-const IDprintPage = ({eventID}) => {
+
+const IDprintPage = () => {
+    const {eventDetail} = useContext(EventContext)
     const [id, setId] = useState('');
     const [QRimg,setQRimg] = useState('')
     const [detail,setDetail] = useState({})
@@ -32,7 +35,7 @@ const IDprintPage = ({eventID}) => {
         try {
             console.log("search click")
             // console.log(baseURL)
-            const res = await fetch(`${baseURL}/api/provider/${eventID || eventURL}/printid/${id}`,{
+            const res = await fetch(`${baseURL}/api/provider/${eventDetail.event._id || eventURL}/printid/${id}`,{
                 method : "GET",
                 credentials : 'include',
                 headers : {
@@ -88,7 +91,9 @@ const IDprintPage = ({eventID}) => {
             setDetail({});
             setIsThere('')
             
-            inputRef.current.focus();}
+            inputRef.current.focus();
+            
+        }
       })
       
       
@@ -146,18 +151,21 @@ const IDprintPage = ({eventID}) => {
                 </div>
             </div>
             {/* ID CARD  */}
-            <div className='hidden'>
-                <div ref={printRef} className=" min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+            <div className="absolute top-0 left-0 min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6 hidden">
+            <div
+                ref={printRef}
+                className="mt-0 ml-0"
+            >
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">Participant Details</h2>
                 <img src={QRimg} alt={id} className="w-32 h-32 mb-4" />
                 <p className="text-gray-700">Name: {detail.name}</p>
-                <p className="text-gray-700">Reg No: {detail.regno}</p>
+                <p className="text-gray-700">Reg No: {detail?.regno}</p>
                 <p className="text-gray-700">Phone: {detail.phone}</p>
                 <p className="text-gray-700">College: {detail.college}</p>
                 <p className="text-gray-700">Email: {detail.email}</p>
-
             </div>
-        </div>
+            </div>
+
     </div>
     );
      
